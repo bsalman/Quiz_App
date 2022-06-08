@@ -6,13 +6,16 @@ const answerCont = document.querySelector('#answer_container')
 const infoDiv =document.querySelector('#info')
 const score = document.querySelector('#score')
 const ProgressBar = document.querySelector('#progress>div')
+const startPageContainer = document.querySelector('.startPageContainer')
+const truIcon = document.querySelector('.trueIcon')
+const falseIcon = document.querySelector('.falseIcon')
 let scoreNum = 0;
 let ProgressNum = 0;
 
 const questions =[
     {
         id:1,
-        question:'how kan i find a job',
+        question:'how kan i find a job ?',
         answers:[
             {text:'ask',correct:true},
             {text:'4',correct:false},
@@ -61,6 +64,18 @@ const questions =[
             {text:'22',correct:false},
             
         ]
+    },
+    {
+        id:6,
+        question:'what is your name ?',
+        answers:[
+            {text:'15',correct:false},
+            {text:'Bashar',correct:true},
+            {text:'5',correct:false},
+            {text:'22',correct:false},
+            {text:'I dont know',correct:false},
+            
+        ]
     }
 ]
   let newRandomQu = null ;
@@ -71,6 +86,7 @@ const questions =[
 //======================== start Button Function =========================//
 startBtn.addEventListener('click',(e)=>{
 e.preventDefault();
+startPageContainer.classList.add('hidden');
 startBtn.classList.add('hidden')
 questionCont.classList.remove('hidden')
 answerCont.classList.remove('hidden')
@@ -88,8 +104,10 @@ setNextQuestion();
 nextBtn.addEventListener("click",(e)=>{
     //adding 1 to the index of the question
     nextBtn.classList.add('hidden')
+    falseIcon.classList.add('hidden')
+    truIcon.classList.add('hidden')
 //change the style of progress bar with changing the indx of question
-    console.log(ProgressBar.style.cssText);
+    // console.log(ProgressBar.style.cssText);
     currentQuestion = currentQuestion +1;
     if(ProgressNum <= 100){
         ProgressNum = Math.floor(ProgressNum + ProgressAdd)
@@ -111,48 +129,48 @@ const reSetState = () =>{
 const setNextQuestion = ()=>{
     //calling withe chosen index
     setTheQuestion(newRandomQu[ currentQuestion ]);
-
-
 }
 //=================================================//
 function setTheQuestion (question){
-    
     questionCont.innerHTML = question.question;
     question.answers.forEach(answer => {
         const answerBtn = document.createElement("button")
         answerBtn.innerHTML = answer.text;
         answerBtn.classList.add("answer");
-        
         if(answer.correct){
             answerBtn.dataset.correct = true
         }
-       
         answerBtn.addEventListener('click',selectAnswer)
-
         answerCont.append(answerBtn)
         });
 
     };
 //================================================//
 const selectAnswer = (e)=>{
+    let answers = Array.from(document.querySelectorAll('.answer'));
+ 
     const selectedBtn = e.target;
-    const correct = selectedBtn.dataset.correct
-    
+    const correct = selectedBtn.dataset.correct  
     if (correct) {
         scoreNum++
         score.innerHTML = scoreNum
-        
-
-      let userObj= localStorage.getItem('userObj')
-      if (userObj != null) {
-          let userWithScore = JSON.parse(userObj)
-          
-          console.log(userWithScore);
-        //   localStorage.setItem('userObj',JSON.stringify(userObj))
-
-
-      }
+        truIcon.classList.remove('hidden');
+        answers.forEach(answer => {
+            answer.removeEventListener('click',selectAnswer)
+            })
+    //   let userObj= localStorage.getItem('userObj')
+    //   if (userObj != null) {
+    //       let userWithScore = JSON.parse(userObj)
+    //     //   localStorage.setItem('userObj',JSON.stringify(userObj))
        
+    //   }
+       
+    }else{
+        
+        falseIcon.classList.remove('hidden');
+        answers.forEach(answer => {
+            answer.removeEventListener('click',selectAnswer)
+            })
     }
     
     Array.from(answerCont.children).forEach(btn =>{
@@ -164,7 +182,6 @@ const selectAnswer = (e)=>{
 
         ProgressNum = 100
         ProgressBar.style.cssText =`width:${ProgressNum}%`
-
         finishBtn.classList.remove('hidden')
         questionCont.classList.add('hidden')
         answerCont.classList.add('hidden')
@@ -174,9 +191,12 @@ const selectAnswer = (e)=>{
 //================= change the Classes to know if the answer is  correct or not =============================//
 const changeBtnClasses =(element,right) =>{
     if (right ) {
-        element.classList.add('right')   
+        element.classList.add('right')
+        
+
     }else{
         element.classList.add('false')
+
     }
 }
 //=========================================//
