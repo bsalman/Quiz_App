@@ -9,6 +9,7 @@ const ProgressBar = document.querySelector('#progress>div')
 const startPageContainer = document.querySelector('.startPageContainer')
 const truIcon = document.querySelector('.trueIcon')
 const falseIcon = document.querySelector('.falseIcon')
+const registerBtn = document.querySelector('#registerBtn');
 let scoreNum = 0;
 let ProgressNum = 0;
 
@@ -83,6 +84,8 @@ const questions =[
   let ProgressAdd = 100/questions.length;
 // let newQuestion = questions.filter((question)=>{questions.indexOf(question) == Math.floor(Math.random() * questions.length) })
 // console.log(newQuestion);
+//===========================register button functions====================//
+
 //======================== start Button Function =========================//
 startBtn.addEventListener('click',(e)=>{
 e.preventDefault();
